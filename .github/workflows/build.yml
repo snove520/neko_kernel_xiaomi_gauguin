@@ -18,6 +18,9 @@ jobs:
     steps:
       - name: "😄 Checkout"
         uses: actions/checkout@v4
+        with:
+          path: ${{ env.OUT_DIR }}
+          key: ${{ runner.os }}-${{ env.CONFIGURATION }}-${{ github.repository }}-${{ github.ref }}
 
       - name: "😄 cache"
         uses: actions/cache@v4
