@@ -146,7 +146,7 @@ jobs:
       - name: "💛 Upload Image"
         uses: actions/upload-artifact@v4
         with:
-          name: Image(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          name: Image(${{ env.kernelName }}-${{ env.kernelBranch }})
           path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image
           if-no-files-found: ignore
           retention-days: 7
@@ -154,7 +154,7 @@ jobs:
       - name: "💙 Upload Image.gz"
         uses: actions/upload-artifact@v4
         with:
-          name: Image.gz(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          name: Image.gz(${{ env.kernelName }}-${{ env.kernelBranch }})
           path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image.gz
           if-no-files-found: ignore
           retention-days: 7
@@ -162,7 +162,7 @@ jobs:
       - name: "💜 Upload dtb"
         uses: actions/upload-artifact@v4
         with:
-          name: dtb(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          name: dtb(${{ env.kernelName }}-${{ env.kernelBranch }})
           path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtb
           if-no-files-found: ignore
           retention-days: 7
@@ -170,21 +170,38 @@ jobs:
       - name: "❤️ Upload dtbo.img"
         uses: actions/upload-artifact@v4
         with:
-          name: dtbo.img(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          name: dtbo.img(${{ env.kernelName }}-${{ env.kernelBranch }})
           path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtbo.img
           if-no-files-found: ignore
           retention-days: 7
+          
+      - name: "📅 Get current date"
+        id: get-date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      
+      - name: "📦 Create Release"
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get-date.outputs.date }}
+          release_name: Release ${{ steps.get-date.outputs.date }}
+          draft: false
+          prerelease: false
+      
       - name: "📦 Upload dtbo.img to Release"
         uses: actions/upload-release-asset@v1
         with:
           asset_path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtbo.img
-          asset_name: dtbo.img(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
-          upload_url: ${{ github.event.release.url }}
+          asset_name: dtbo.img(${{ env.kernelName }}-${{ env.kernelBranch }})
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: "📦 Upload Image to Release"
         uses: actions/upload-release-asset@v1
         with:
           asset_path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image
-          asset_name: Image(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
-          upload_url: ${{ github.event.release.url }}
+          asset_name: Image(${{ env.kernelName }}-${{ env.kernelBranch }})
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
