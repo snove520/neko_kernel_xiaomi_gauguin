@@ -198,6 +198,7 @@ jobs:
         with:
           asset_path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtbo.img
           asset_name: dtbo.img(${{ env.kernelName }}-${{ env.kernelBranch }})
+          asset_content_type: application/octet-stream
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
       
@@ -206,5 +207,6 @@ jobs:
         with:
           asset_path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image
           asset_name: Image(${{ env.kernelName }}-${{ env.kernelBranch }})
+          asset_content_type: application/octet-stream
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
