@@ -1,0 +1,34 @@
+[  {
+    "kernelSource": {
+      "name": "kernel_lineageos_gauguin",
+      "repo": "https://github.com/snove520/neko_kernel_xiaomi_gauguin",
+      "branch": "main",
+      "device": "gauguin"
+    },
+    "toolchains": [
+      {
+        "repo": "https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9",
+        "branch": "lineage-19.1",
+        "name": "gcc64"
+      },    
+      {
+        "repo": "https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9",
+        "branch": "lineage-19.1",
+        "name": "gcc32"
+      },
+      {
+        "repo": "https://github.com/LineageOS/android_prebuilts_clang_kernel_linux-x86_clang-r416183b/",
+        "branch": "lineage-20.0",
+        "name": "clang"
+      }
+    ],
+    "params": {
+      "ARCH": "arm64",
+      "CROSS_COMPILE": "aarch64-linux-android-",
+      "CROSS_COMPILE_ARM32": "arm-linux-androideabi-",
+      "CROSS_COMPILE_COMPAT": "arm-linux-gnueabi-",
+      "CLANG_TRIPLE": "aarch64-linux-gnu-",
+      "CC": "clang"
+    }
+  }
+]
