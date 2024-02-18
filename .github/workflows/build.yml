@@ -208,3 +208,26 @@ jobs:
           asset_name: Image(${{ env.kernelName }}-${{ env.kernelBranch }})
           asset_content_type: application/octet-stream
           upload_url: ${{ steps.create-release.outputs.upload_url }}
+          
+      - name: "📦 Checkout AnyKernel3"
+        run: |
+          git clone https://github.com/osm0sis/AnyKernel3 --depth=1
+    
+      - name: "🎁 Create Flashable Zip"
+        working-directory: AnyKernel3
+        run: |
+          # 替换 AnyKernel3 中引导镜像的路径
+          sed -i 's!kernel.string=1!kernel.string=Your Custom Kernel Info!g' anykernel.sh
+          sed -i 's!do.devicecheck=1!do.devicecheck=0!g' anykernel.sh
+          cp ../${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image ./
+          zip -r9 ../Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip *       # 创建 zip 文件
+    
+      - name: "📦 Upload Flashable Zip to Release"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}      # 使用 GitHub 提供的 GITHUB_TOKEN
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip   # 上传我们创建的 zip 文件
+          asset_name: Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip   
+          asset_content_type: application/zip
