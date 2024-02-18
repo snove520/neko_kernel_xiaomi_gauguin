@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: "😄 Checkout"
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
         
       - name: "😄 cache"
         uses: actions/cache@v4
@@ -185,8 +187,6 @@ jobs:
       - name: "📦 Create Release"
         id: create-release
         uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.CURRENT_DATE }}
           release_name: Release ${{ env.CURRENT_DATE }}
@@ -200,7 +200,6 @@ jobs:
           asset_name: dtbo.img(${{ env.kernelName }}-${{ env.kernelBranch }})
           asset_content_type: application/octet-stream
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: "📦 Upload Image to Release"
         uses: actions/upload-release-asset@v1
@@ -209,7 +208,6 @@ jobs:
           asset_name: Image(${{ env.kernelName }}-${{ env.kernelBranch }})
           asset_content_type: application/octet-stream
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: "📦 Checkout AnyKernel3"
         run: |
@@ -221,7 +219,7 @@ jobs:
           sed -i 's!kernel.string=1!kernel.string=Your Custom Kernel Info!g' anykernel.sh
           sed -i 's!do.devicecheck=1!do.devicecheck=0!g' anykernel.sh
           cp ../${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image ./
-          zip -r9 ../Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip *       # 创建 zip 文件
+          zip -r9 ../Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip * 
     
       - name: "📦 Upload Flashable Zip to Release"
         uses: actions/upload-release-asset@v1
@@ -229,6 +227,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: ./Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip   # 上传我们创建的 zip 文件
+          asset_path: ./Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip 
           asset_name: Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip   
           asset_content_type: application/zip
