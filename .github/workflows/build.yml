@@ -18,8 +18,8 @@ jobs:
     steps:
       - name: "😄 Checkout"
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         
       - name: "😄 cache"
         uses: actions/cache@v4
@@ -187,6 +187,8 @@ jobs:
       - name: "📦 Create Release"
         id: create-release
         uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ env.CURRENT_DATE }}
           release_name: Release ${{ env.CURRENT_DATE }}
@@ -195,6 +197,8 @@ jobs:
       
       - name: "📦 Upload dtbo.img to Release"
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           asset_path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtbo.img
           asset_name: dtbo.img(${{ env.kernelName }}-${{ env.kernelBranch }})
@@ -203,6 +207,8 @@ jobs:
       
       - name: "📦 Upload Image to Release"
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           asset_path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image
           asset_name: Image(${{ env.kernelName }}-${{ env.kernelBranch }})
@@ -223,6 +229,8 @@ jobs:
     
       - name: "📦 Upload Flashable Zip to Release"
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./Kernel_${{ env.kernelName }}_${{ env.CURRENT_DATE }}.zip 
