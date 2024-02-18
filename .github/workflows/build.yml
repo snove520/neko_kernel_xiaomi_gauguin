@@ -180,16 +180,16 @@ jobs:
           
       - name: "📅 Get current date"
         id: get-date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       
       - name: "📦 Create Release"
         id: create-release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:
-          tag_name: ${{ steps.get-date.outputs.date }}
-          release_name: Release ${{ steps.get-date.outputs.date }}
+          tag_name: ${{ env.CURRENT_DATE }}
+          release_name: Release ${{ env.CURRENT_DATE }}
           draft: false
           prerelease: false
       
