@@ -1,6 +1,6 @@
 [  {
     "kernelSource": {
-      "name": "kernel_lineageos_gauguin",
+      "name": "kernel_neko_gauguin",
       "repo": "https://github.com/snove520/neko_kernel_xiaomi_gauguin",
       "branch": "main",
       "device": "gauguin"
