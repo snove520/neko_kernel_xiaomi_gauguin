@@ -208,6 +208,7 @@ jobs:
         run: |
           sed -i 's!kernel.string=1!kernel.string=Your Custom Kernel Info!g' anykernel.sh
           sed -i 's!do.devicecheck=1!do.devicecheck=0!g' anykernel.sh
+          sed -i 's!block=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!block=auto;!g' anykernel.sh
           cp ../${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image ./
           zip -r9 ../kernel_neko_gauguin_${{ env.CURRENT_DATE }}.zip * 
     
